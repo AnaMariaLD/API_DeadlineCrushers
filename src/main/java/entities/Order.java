@@ -5,7 +5,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain=true)
-public class Store {
+public class Order {
     private int id;
     private int petId;
     private int quantity;

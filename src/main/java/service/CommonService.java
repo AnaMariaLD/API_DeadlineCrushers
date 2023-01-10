@@ -10,7 +10,7 @@ import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
 
 public abstract class CommonService {
-    private static final String BASE_URI = "http://localhost/v2/";
+    private static final String BASE_URI = "http://localhost:80/v2/";
     private final Function<String, String> prepareUri = uri -> String.format("%s%s", BASE_URI, uri);
     protected RequestSpecification requestSpecification;
 
