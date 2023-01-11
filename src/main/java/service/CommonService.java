@@ -43,7 +43,7 @@ public abstract class CommonService {
                 .when().get(prepareUri.apply(uri));
     }
 
-    protected Response getRequest(String uri, String id) {
+    public Response getRequest(String uri, String id) {
         return requestSpecification.expect().statusCode(anyOf(is(HttpStatus.SC_OK), is(HttpStatus.SC_NOT_FOUND)))
                 .log().ifError()
                 .when().get(prepareUri.apply(uri) + id);

@@ -13,8 +13,8 @@ public class PetService extends CommonService{
         if (instance == null) instance = new PetService();
         return instance;
     }
-    public Response getRequest(UriTemplate uri) {
-        return super.getRequest(uri.getUri());
+    public Response getRequest(UriTemplate uri, String id) {
+        return super.getRequest(uri.getUri(), id);
     }
     public Response postRequest(UriTemplate uri, Object body) {
         return super.postRequest(uri.getUri(), body);
