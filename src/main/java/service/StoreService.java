@@ -20,7 +20,7 @@ public class StoreService extends CommonService{
         return super.postRequest(uri.getUri(), body);
     }
     public Response deleteRequest(UriTemplate uri, String orderId) {
-        return super.deleteRequest(uri.getUri() + "/"+ orderId);
+        return super.deleteRequest(uri.getUri() + orderId);
     }
     public Response putRequest(UriTemplate uri, Object body) {
         return super.putRequest(uri.getUri(), body);
