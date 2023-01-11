@@ -1,16 +1,36 @@
 package storetests;
 
 import entities.Order;
+import entities.auxiliaries.Inventory;
+import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import service.StoreService;
 import steps.StoreServiceSteps;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
-public class OrderTests {
+import static service.uritemplate.StoreServiceUri.ORDER_BY_ID;
+import static service.uritemplate.StoreServiceUri.STORE_INVENTORY;
 
+public class OrderTests {
+    StoreService service = StoreService.getInstance();
+    @Test
+    public void getOrderById() {
+        String orderID = "2";
+        Response response = service.getRequest(ORDER_BY_ID, orderID);
+
+        service.storeOrderIdAssertion(response, orderID);
+    }
+
+    @Test
+    public void getInventory() {
+        Inventory inventory = service.getRequest(STORE_INVENTORY).as(Inventory.class);
+
+        service.inventoryExistence(inventory);
+    }
     @Test
     public void checkOrderIsPlaced(){
         Order expectedOrder = createOrder();
