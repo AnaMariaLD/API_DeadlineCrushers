@@ -19,8 +19,8 @@ public class UserServiceSteps {
         return USER_SERVICE.getRequest(USER_NAME);
     }
 
-    public static Response getUserLogin() {
-        return USER_SERVICE.getRequest(USER_LOGIN);
+    public static Response getUserLogin(String username, String password) {
+        return USER_SERVICE.getRequestQueryUserLogin(USER_LOGIN, username, password);
     }
 
     public static Response getUserLogout() {

@@ -28,7 +28,7 @@ public class UserTests {
 
     @Test
     public void getLoginTest() {
-        response = UserServiceSteps.getUserLogin();
+        response = UserServiceSteps.getUserLogin("a","a");
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
     }
 
