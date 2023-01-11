@@ -9,8 +9,11 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
 
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
+
 public abstract class CommonService {
-    private static final String BASE_URI = "http://localhost/v2/";
+    private static final String BASE_URI = "http://localhost:80/v2/";
     private final Function<String, String> prepareUri = uri -> String.format("%s%s", BASE_URI, uri);
     protected RequestSpecification requestSpecification;
 
@@ -38,6 +41,12 @@ public abstract class CommonService {
     protected Response getRequest(String uri) {
         return requestSpecification.expect().statusCode(HttpStatus.SC_OK).log().ifError()
                 .when().get(prepareUri.apply(uri));
+    }
+
+    protected Response getRequest(String uri, String id) {
+        return requestSpecification.expect().statusCode(anyOf(is(HttpStatus.SC_OK), is(HttpStatus.SC_NOT_FOUND)))
+                .log().ifError()
+                .when().get(prepareUri.apply(uri) + id);
     }
 
     protected Response putRequest(String uri, Object body) {
