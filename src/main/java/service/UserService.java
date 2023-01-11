@@ -30,5 +30,8 @@ public class UserService extends CommonService{
     public Response getRequestAfterDelete(UriTemplate uri, String username) {
         return super.getRequestAfterDelete(uri.getUri(username));
     }
+    public Response getRequestQueryUserLogin(UriTemplate uri, String username, String password){
+        return super.getRequestQueryUserLogin(uri.getUri(), username, password);
+    }
 
 }

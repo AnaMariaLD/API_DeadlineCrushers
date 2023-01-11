@@ -34,8 +34,8 @@ public abstract class CommonService {
                 .when().post(prepareUri.apply(uri));
     }
 
-    protected Response getRequestQuery(String uri, String status) {
-        return requestSpecification.queryParam("status", status).expect().statusCode(HttpStatus.SC_OK).log().ifError()
+    protected Response getRequestQueryUserLogin(String uri, String username, String password) {
+        return requestSpecification.queryParam("username", username).queryParam("password", password).expect().statusCode(HttpStatus.SC_OK).log().ifError()
                 .when().get(prepareUri.apply(uri));
     }
 
