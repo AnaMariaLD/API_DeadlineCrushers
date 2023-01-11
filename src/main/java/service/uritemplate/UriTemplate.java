@@ -9,6 +9,10 @@ public class UriTemplate {
     public String getUri() {
         return String.format(url, "");
     }
+    public String getUri(Object... params) {
+        return String.format(url, params);
+    }
+
 
 
 }

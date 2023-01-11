@@ -7,6 +7,7 @@ import java.util.function.Function;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import log.Log;
 import org.apache.http.HttpStatus;
 
 import static org.hamcrest.Matchers.anyOf;
@@ -55,10 +56,21 @@ public abstract class CommonService {
 
     }
     protected Response deleteRequest(String uri) {
-
         return requestSpecification.expect().statusCode(HttpStatus.SC_OK).log().ifError()
                 .when().delete(prepareUri.apply(uri));
     }
 
+    protected Response getRequestAfterDelete(String uri) {
+        Log.info("Sending the get request to the Uri " + prepareUri.apply(uri));
+        Response responseToGetRq = requestSpecification
+                .expect()
+                .statusCode(HttpStatus.SC_NOT_FOUND)
+                .log()
+                .ifError()
+                .when()
+                .get(prepareUri.apply(uri));
+        Log.info("Response body is " + responseToGetRq.asPrettyString());
+        return responseToGetRq;
+    }
 
 }

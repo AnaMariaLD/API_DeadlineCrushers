@@ -6,9 +6,7 @@ import service.uritemplate.UriTemplate;
 public class UserService extends CommonService{
     private static UserService instance;
 
-    private UserService() {
-
-    }
+    private UserService() {}
 
     public static UserService getInstance() {
         if (instance == null) instance = new UserService();
@@ -26,4 +24,11 @@ public class UserService extends CommonService{
     public Response putRequest(UriTemplate uri, Object body) {
         return super.putRequest(uri.getUri(), body);
     }
+    public void deleteRequestByUsername(UriTemplate uri,String username){
+        super.deleteRequest(uri.getUri(username));
+    }
+    public Response getRequestAfterDelete(UriTemplate uri, String username) {
+        return super.getRequestAfterDelete(uri.getUri(username));
+    }
+
 }
