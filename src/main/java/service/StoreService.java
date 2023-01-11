@@ -23,8 +23,8 @@ public class StoreService extends CommonService{
     public Response postRequest(UriTemplate uri, Object body) {
         return super.postRequest(uri.getUri(), body);
     }
-    public Response deleteRequest(UriTemplate uri) {
-        return super.deleteRequest(uri.getUri());
+    public Response deleteRequest(UriTemplate uri, String orderId) {
+        return super.deleteRequest(uri.getUri() + orderId);
     }
     public Response putRequest(UriTemplate uri, Object body) {
         return super.putRequest(uri.getUri(), body);
