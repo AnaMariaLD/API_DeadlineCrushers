@@ -38,6 +38,8 @@ public abstract class CommonService {
                 .when().get(prepareUri.apply(uri));
     }
 
+
+
     protected Response getRequest(String uri) {
         return requestSpecification.expect().statusCode(HttpStatus.SC_OK).log().ifError()
                 .when().get(prepareUri.apply(uri));
