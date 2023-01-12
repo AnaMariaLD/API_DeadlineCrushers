@@ -3,7 +3,6 @@ package service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -25,8 +24,9 @@ public abstract class CommonService {
 
     protected void setCommonParams() {
         Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/json");
         headers.put("accept","application/json");
+        headers.put("Content-Type", "application/json");
+
         requestSpecification.headers(headers);
     }
     protected Response postRequest(String uri, Object body) {
@@ -44,13 +44,19 @@ public abstract class CommonService {
                 .when().get(prepareUri.apply(uri));
     }
 
-    protected Response getRequest(String uri, String id) {
+    public Response getRequest(String uri, String id) {
         return requestSpecification.expect().statusCode(anyOf(is(HttpStatus.SC_OK), is(HttpStatus.SC_NOT_FOUND)))
                 .log().ifError()
                 .when().get(prepareUri.apply(uri) + id);
     }
 
     protected Response putRequest(String uri, Object body) {
+        return requestSpecification.body(body).expect().statusCode(HttpStatus.SC_OK).log().ifError()
+                .when().put(prepareUri.apply(uri));
+
+    }
+
+    protected Response putRequest(String uri, Object body, String id) {
         return requestSpecification.body(body).expect().statusCode(HttpStatus.SC_OK).log().ifError()
                 .when().put(prepareUri.apply(uri));
 
