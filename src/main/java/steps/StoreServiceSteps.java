@@ -26,9 +26,4 @@ public class StoreServiceSteps {
     public static Inventory getInventory() {
         return STORE_SERVICE.getRequest(STORE_INVENTORY).as(Inventory.class);
     }
-    public void inventoryExistence(Inventory inventory) {
-        Assert.assertTrue(inventory.getAvailable() >= 0);
-        Assert.assertTrue(inventory.getSold() >= 0);
-        Assert.assertTrue(inventory.getPending() >= 0);
-    }
 }
