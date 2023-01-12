@@ -49,8 +49,12 @@ public abstract class CommonService {
                 .log().ifError()
                 .when().get(prepareUri.apply(uri) + id);
     }
+    protected Response getRequestQuery(String uri, String status) {
+        return requestSpecification.queryParam("status", status).expect().statusCode(HttpStatus.SC_OK).log().ifError()
+                .when().get(prepareUri.apply(uri));
+    }
 
-    protected Response putRequest(String uri, Object body) {
+        protected Response putRequest(String uri, Object body) {
         return requestSpecification.body(body).expect().statusCode(HttpStatus.SC_OK).log().ifError()
                 .when().put(prepareUri.apply(uri));
 
