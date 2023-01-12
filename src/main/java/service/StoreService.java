@@ -1,10 +1,6 @@
 package service;
 
-import entities.Order;
-import entities.auxiliaries.Inventory;
 import io.restassured.response.Response;
-import org.apache.http.HttpStatus;
-import org.testng.Assert;
 import service.uritemplate.UriTemplate;
 
 public class StoreService extends CommonService{
@@ -31,17 +27,5 @@ public class StoreService extends CommonService{
     }
     public Response getRequest(UriTemplate uri, String id) {
         return super.getRequest(uri.getUri(), id);
-    }
-
-    public void storeOrderIdAssertion(Response response, String orderID) {
-        Order ourOrder = response.as(Order.class);
-
-        Assert.assertEquals((Integer.toString(ourOrder.getId())), orderID);
-    }
-
-    public void inventoryExistence(Inventory inventory) {
-        Assert.assertTrue(inventory.getAvailable() >= 0);
-        Assert.assertTrue(inventory.getSold() >= 0);
-        Assert.assertTrue(inventory.getPending() >= 0);
     }
 }

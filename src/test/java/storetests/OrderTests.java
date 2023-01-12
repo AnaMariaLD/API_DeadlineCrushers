@@ -2,35 +2,16 @@ package storetests;
 
 import entities.Order;
 import entities.auxiliaries.Inventory;
-import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import service.StoreService;
 import steps.StoreServiceSteps;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
-import static service.uritemplate.StoreServiceUri.ORDER_BY_ID;
-import static service.uritemplate.StoreServiceUri.STORE_INVENTORY;
-
 public class OrderTests {
-    StoreService service = StoreService.getInstance();
-    @Test (groups = { "order"})
-    public void getOrderById() {
-        String orderID = "2";
-        Response response = service.getRequest(ORDER_BY_ID, orderID);
 
-        service.storeOrderIdAssertion(response, orderID);
-    }
-
-    @Test (groups = { "order", "smoke" })
-    public void getInventory() {
-        Inventory inventory = service.getRequest(STORE_INVENTORY).as(Inventory.class);
-
-        service.inventoryExistence(inventory);
-    }
     @Test (groups = { "order", "smoke" })
     public void checkOrderIsPlaced(){
         Order expectedOrder = createOrder();
@@ -49,6 +30,24 @@ public class OrderTests {
         Assert.assertEquals(responseMessage,orderId.toString());
 
    }
+
+    @Test (groups = { "order"})
+    public void getOrderById() {
+        String orderID = "2";
+        Order ourOrder = StoreServiceSteps.getOrderById(orderID);
+
+        Assert.assertEquals((Integer.toString(ourOrder.getId())), orderID,
+                "The recieved order does not match the requested id! We recieved order: " + (ourOrder.getId()));
+    }
+
+    @Test (groups = { "order", "smoke" })
+    public void getInventory() {
+        Inventory inventory = StoreServiceSteps.getInventory();
+
+        Assert.assertTrue(inventory.getAvailable() >= 0, "Available stock is not a real value! ( >= 0");
+        Assert.assertTrue(inventory.getSold() >= 0, "Sold amount is not a real value! ( >= 0");
+        Assert.assertTrue(inventory.getPending() >= 0, "Pending amount is not a real value! ( >= 0");
+    }
 
     private Order createOrder(){
         Random random = new Random();
