@@ -13,39 +13,39 @@ public class UserTests {
     private static Response response;
     private static User user;
 
-    @Test
+    @Test (groups = { "user"})
     public void createUserArrayListTest() {
         ArrayList<User> users = createUserListBody();
         response = UserServiceSteps.createUserList(users);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
     }
 
-    @Test
+    @Test (groups = { "user"})
     public void getUsernameTest() {
         response = UserServiceSteps.getUsername();
         Assert.assertEquals(response.as(User.class).getUsername(), "TestAPI");
     }
 
-    @Test
+    @Test (groups = { "user", "smoke"})
     public void getLoginTest() {
         response = UserServiceSteps.getUserLogin("a","a");
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
     }
 
-    @Test
+    @Test (groups = { "user"})
     public void getUserLogoutTest() {
         response = UserServiceSteps.getUserLogout();
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
     }
 
-    @Test
+    @Test (groups = { "user", "smoke"})
     public void createUserTest() {
         user = createUserBody();
         response = UserServiceSteps.createUser(user);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
     }
 
-    @Test(dependsOnMethods = "createUserTest")
+    @Test(dependsOnMethods = "createUserTest",groups = { "user"})
     public void deleteUserByUsernameTest() {
         user = createUserBody();
 
@@ -55,7 +55,7 @@ public class UserTests {
         Assert.assertEquals(response.getStatusCode(), 404, "This is not the expected status code !");
     }
 
-    @Test
+    @Test (groups = { "user"})
     public void updateUserTest(){
         user = createUserBody();
         response = UserServiceSteps.updateUser(user);

@@ -17,7 +17,7 @@ import static service.uritemplate.StoreServiceUri.STORE_INVENTORY;
 
 public class OrderTests {
     StoreService service = StoreService.getInstance();
-    @Test
+    @Test (groups = { "order"})
     public void getOrderById() {
         String orderID = "2";
         Response response = service.getRequest(ORDER_BY_ID, orderID);
@@ -25,13 +25,13 @@ public class OrderTests {
         service.storeOrderIdAssertion(response, orderID);
     }
 
-    @Test
+    @Test (groups = { "order", "smoke" })
     public void getInventory() {
         Inventory inventory = service.getRequest(STORE_INVENTORY).as(Inventory.class);
 
         service.inventoryExistence(inventory);
     }
-    @Test
+    @Test (groups = { "order", "smoke" })
     public void checkOrderIsPlaced(){
         Order expectedOrder = createOrder();
         Order actualOrder = StoreServiceSteps.postOrder(expectedOrder);
@@ -40,7 +40,7 @@ public class OrderTests {
 
     }
 
-   @Test
+   @Test (groups = { "order" })
    public void checkPostedOrderIsDeleted(){
         Order newOrder = createOrder();
         StoreServiceSteps.postOrder(newOrder);
