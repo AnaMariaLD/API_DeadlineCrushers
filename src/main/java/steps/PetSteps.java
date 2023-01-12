@@ -10,6 +10,7 @@ public class PetSteps   {
 
     public static Pet getPetByID(String id){
         return PET_SERVICE.getRequest(PET_BY_ID.toString(),id).as(Pet.class);
-
     }
+
+
 }
