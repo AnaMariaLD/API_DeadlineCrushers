@@ -36,6 +36,7 @@ public abstract class CommonService {
     protected Response getRequestQuery(String uri, String status) {
         return requestSpecification.queryParam("status", status).expect().statusCode(HttpStatus.SC_OK).log().ifError()
                 .when().get(prepareUri.apply(uri));
+
     }
 
     protected Response getRequest(String uri) {
