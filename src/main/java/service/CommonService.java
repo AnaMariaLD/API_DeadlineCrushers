@@ -50,8 +50,7 @@ public abstract class CommonService {
                 .when().get(prepareUri.apply(uri) + id);
     }
     protected Response getRequestQuery(String uri, String status) {
-        return requestSpecification.queryParam("status", status).expect().statusCode(HttpStatus.SC_OK).log().ifError()
-                .when().get(prepareUri.apply(uri));
+        return RestAssured.given().queryParam("status", status).expect().statusCode(HttpStatus.SC_OK).log().ifError().when().get(prepareUri.apply(uri));
     }
 
         protected Response putRequest(String uri, Object body) {
