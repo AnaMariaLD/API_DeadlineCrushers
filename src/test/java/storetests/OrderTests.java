@@ -2,6 +2,7 @@ package storetests;
 
 import entities.Order;
 import entities.auxiliaries.Inventory;
+import io.qameta.allure.Description;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import steps.StoreServiceSteps;
@@ -12,7 +13,8 @@ import java.util.Random;
 
 public class OrderTests {
 
-    @Test (groups = { "order", "smoke" })
+    @Test (groups = { "order", "smoke" }, description = "Placing an order")
+    @Description("Test Description: Testing to see if an order is placed by verifying the same order ID is returned")
     public void checkOrderIsPlaced(){
         Order expectedOrder = createOrder();
         Order actualOrder = StoreServiceSteps.postOrder(expectedOrder);
@@ -21,7 +23,8 @@ public class OrderTests {
 
     }
 
-   @Test (groups = { "order" })
+   @Test (groups = { "order" }, description = "Deleting an order by ID")
+   @Description("Test Description: Testing if an order of selected ID is deleted by verifying the response message")
    public void checkPostedOrderIsDeleted(){
         Order newOrder = createOrder();
         StoreServiceSteps.postOrder(newOrder);
