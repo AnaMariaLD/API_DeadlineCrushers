@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -25,14 +26,10 @@ public class OrderTests {
     @Description("Test Description: Testing to see if an order is placed by verifying the same order ID is returned")
     public void checkOrderIsPlaced() throws IOException {
         Order expectedOrder = createOrder();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File(System.getProperty("user.dir") + "/src/test/resources/placedOrder.json"),mapOrderData(expectedOrder));
-//        try (InputStream is = Files.newInputStream(Path.get(System.getProperty("user.dir") + "/src/test/resources/placedOrder.json"))) {
-//            Allure.addAttachment("PlacedOrder", is);
-//        }
+        writeOrderDataInFile("PlacedOrder",expectedOrder);
         Order actualOrder = StoreServiceSteps.postOrder(expectedOrder);
-        mapper.writeValue(new File(System.getProperty("user.dir") + "/src/test/resources/retrievedOrder.json"),mapOrderData(actualOrder));
-        Assert.assertEquals(actualOrder.getId(),expectedOrder.getId(),
+        writeOrderDataInFile("RetrievedOrder",actualOrder);
+        Assert.assertEquals(actualOrder.getId(), expectedOrder.getId(),
                 "Expected order id is not the same as retrieved order id");
 
     }
@@ -94,5 +91,13 @@ public class OrderTests {
         orderDataMap.put("status",order.getStatus());
         orderDataMap.put("complete",true);
         return orderDataMap;
+    }
+
+    private void writeOrderDataInFile(String fileName, Order order) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(new File(System.getProperty("user.dir") + "/src/test/resources/" +fileName+ ".json"), mapOrderData(order));
+        try (InputStream is = Files.newInputStream(Paths.get(System.getProperty("user.dir") + "/src/test/resources/" +fileName+ ".json"))) {
+            Allure.addAttachment(fileName,"application/json",is,".json");
+        }
     }
 }
