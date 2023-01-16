@@ -2,15 +2,16 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="PetStore API" parallel="classes" thread-count="5">
     <test verbose="2" preserve-order="true" name="SmokeTest">
-        <groups>
-            <run>
-                <include name="smoke"/>
-            </run>
-        </groups>
+<!--        <groups>-->
+<!--            <run>-->
+<!--                <include name="smoke"/>-->
+<!--            </run>-->
+<!--        </groups>-->
 
         <classes>
             <class name="storetests.OrderTests"/>
             <class name="usertests.UserTests"/>
+            <class name="pettests.PetTests"/>
         </classes>
     </test>
 </suite>

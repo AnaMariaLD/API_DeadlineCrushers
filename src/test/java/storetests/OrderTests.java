@@ -1,23 +1,37 @@
 package storetests;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.Order;
 import entities.auxiliaries.Inventory;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import steps.StoreServiceSteps;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class OrderTests {
 
     @Test (groups = { "order", "smoke" }, description = "Placing an order")
     @Description("Test Description: Testing to see if an order is placed by verifying the same order ID is returned")
-    public void checkOrderIsPlaced(){
+    public void checkOrderIsPlaced() throws IOException {
         Order expectedOrder = createOrder();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(new File(System.getProperty("user.dir") + "/src/test/resources/placedOrder.json"),mapOrderData(expectedOrder));
+//        try (InputStream is = Files.newInputStream(Path.get(System.getProperty("user.dir") + "/src/test/resources/placedOrder.json"))) {
+//            Allure.addAttachment("PlacedOrder", is);
+//        }
         Order actualOrder = StoreServiceSteps.postOrder(expectedOrder);
+        mapper.writeValue(new File(System.getProperty("user.dir") + "/src/test/resources/retrievedOrder.json"),mapOrderData(actualOrder));
         Assert.assertEquals(actualOrder.getId(),expectedOrder.getId(),
                 "Expected order id is not the same as retrieved order id");
 
@@ -70,5 +84,15 @@ public class OrderTests {
                 .setStatus(status)
                 .setComplete(true);
 
+    }
+    private Map<String, Object> mapOrderData(Order order){
+        Map<String,Object> orderDataMap = new HashMap<String,Object>();
+        orderDataMap.put("id",order.getId());
+        orderDataMap.put("petId", order.getPetId());
+        orderDataMap.put("quantity",order.getQuantity());
+        orderDataMap.put("shipDate",order.getShipDate());
+        orderDataMap.put("status",order.getStatus());
+        orderDataMap.put("complete",true);
+        return orderDataMap;
     }
 }
