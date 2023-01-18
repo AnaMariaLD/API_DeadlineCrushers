@@ -24,7 +24,7 @@ import static service.uritemplate.PetServiceUri.PET_BY_STATUS;
 public class PetTests {
     PetService service = PetService.getInstance();
 
-    @Test
+    @Test(groups = {"pet"})
     public void getPetById() {
         String actualPetID = "2";
         Response response = service.getRequest(PET_BY_ID, actualPetID);
@@ -32,7 +32,7 @@ public class PetTests {
         Assert.assertTrue(response.getBody().as(Pet.class).getId().toString().equals(actualPetID), "The expected Pet ID is not equals to actual Pet ID");
     }
 
-    @Test(priority = 2)
+    @Test(groups = {"pet"})
     public void getPetByIdNegative() {
         String actualPetID = "-23";
         Response response = service.getRequest(PET_BY_ID, actualPetID);
@@ -40,7 +40,7 @@ public class PetTests {
         Assert.assertTrue(response.getStatusCode() == 404, "Pet with "+actualPetID+" exists.");
     }
 
-    @Test
+    @Test(groups = {"pet"})
     public void getPetByIdNegativeWithCharacter() {
         String actualPetID = "wadxcw";
         Response response = service.getRequest(PET_BY_ID, actualPetID);
@@ -48,7 +48,7 @@ public class PetTests {
         Assert.assertTrue(response.getStatusCode() == 404, "Pet with "+actualPetID+" exists.");
     }
 
-    @Test
+    @Test(groups = {"pet","smoke"})
     public void createPetTest() {
         Pet expectedPet = createPet();
         Pet actualPet = PetSteps.createPet(expectedPet);
@@ -56,7 +56,7 @@ public class PetTests {
                 "Expected pet name does not match created pet name");
     }
 
-    @Test(dataProvider = "StatusData")
+    @Test(dataProvider = "StatusData", groups = {"pet","smoke"})
     public void getPetByStatus(String status) {
         Response petListResponse = PetSteps.getPetByStatus(status);
         List<Pet> petList = petListResponse.jsonPath().getList("", Pet.class);
@@ -72,14 +72,14 @@ public class PetTests {
         };
     }
 
-    @Test
+    @Test(groups = {"pet","smoke"})
     public void getPetByStatusNegative() {
 
         Response response = PetSteps.getPetByStatus("teststatus213");
         Assert.assertFalse(response.getStatusCode() == 200, "statuscode 200 for status: teststatus213 !");
     }
 
-    @Test
+    @Test(groups = {"pet"})
     public void attachImageToAPet(){
         File file = new File("C:\\Users\\Zoltan_Bone-Greczi\\IdeaProjects\\API_DeadlineCrushers\\src\\main\\java\\resources\\dog.jpg");
         Response response = PetSteps.postPictureToAPet("3","wdwdw",file);
@@ -91,7 +91,7 @@ public class PetTests {
 
     }
 
-    @Test
+    @Test(groups = {"pet","smoke"})
     public void attachImageToAPetNegative(){
         File file = new File("C:\\Users\\Zoltan_Bone-Greczi\\IdeaProjects\\API_DeadlineCrushers\\src\\main\\java\\resources\\Proiect_pestStore_api.docx");
         Response response = PetSteps.postPictureToAPet("3","wdwdw",file);

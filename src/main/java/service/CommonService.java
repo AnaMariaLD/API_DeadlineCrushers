@@ -8,12 +8,13 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import log.Log;
 import org.apache.http.HttpStatus;
+import properties.InfrastructureEnv;
 
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.is;
 
 public abstract class CommonService {
-    private static final String BASE_URI = "http://localhost:80/v2/";
+    private static final String BASE_URI = InfrastructureEnv.getBaseUri();
     private final Function<String, String> prepareUri = uri -> String.format("%s%s", BASE_URI, uri);
     protected RequestSpecification requestSpecification;
 
@@ -50,8 +51,7 @@ public abstract class CommonService {
                 .when().get(prepareUri.apply(uri) + id);
     }
     protected Response getRequestQuery(String uri, String status) {
-        return requestSpecification.queryParam("status", status).expect().statusCode(HttpStatus.SC_OK).log().ifError()
-                .when().get(prepareUri.apply(uri));
+        return RestAssured.given().queryParam("status", status).expect().statusCode(HttpStatus.SC_OK).log().ifError().when().get(prepareUri.apply(uri));
     }
 
         protected Response putRequest(String uri, Object body) {
