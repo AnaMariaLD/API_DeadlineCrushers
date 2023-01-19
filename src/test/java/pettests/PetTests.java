@@ -1,8 +1,11 @@
 package pettests;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import entities.Order;
 import entities.Pet;
 import entities.auxiliaries.Category;
 import entities.auxiliaries.Tags;
+import io.qameta.allure.Allure;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -11,11 +14,12 @@ import org.testng.annotations.Test;
 import service.PetService;
 import steps.PetSteps;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static java.lang.Math.pow;
 import static service.uritemplate.PetServiceUri.PET_BY_ID;
@@ -49,9 +53,11 @@ public class PetTests {
     }
 
     @Test(groups = {"pet","smoke"})
-    public void createPetTest() {
+    public void createPetTest() throws IOException {
         Pet expectedPet = createPet();
+        writePetDataInFile("CreatedPet", expectedPet);
         Pet actualPet = PetSteps.createPet(expectedPet);
+        writePetDataInFile("RetrievedPet", actualPet);
         Assert.assertEquals(actualPet.getName(), expectedPet.getName(),
                 "Expected pet name does not match created pet name");
     }
@@ -132,5 +138,23 @@ public class PetTests {
                 .setPhotoUrls(Arrays.asList("sourceOfPhoto" + timestamp))
                 .setTags(tags)
                 .setStatus("available");
+    }
+    private Map<String, Object> mapPetData(Pet pet){
+        Map<String,Object> petDataMap = new HashMap<String,Object>();
+        petDataMap.put("id",pet.getId());
+        petDataMap.put("category", pet.getCategory());
+        petDataMap.put("name",pet.getName());
+        petDataMap.put("urls",pet.getPhotoUrls());
+        petDataMap.put("tags",pet.getTags());
+        petDataMap.put("status",pet.getStatus());
+        return petDataMap;
+    }
+
+    private void writePetDataInFile(String fileName, Pet pet) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(new File(System.getProperty("user.dir") + "/src/test/resources/" +fileName+ ".json"), mapPetData(pet));
+        try (InputStream is = Files.newInputStream(Paths.get(System.getProperty("user.dir") + "/src/test/resources/" +fileName+ ".json"))) {
+            Allure.addAttachment(fileName,"application/json",is,".json");
+        }
     }
 }
