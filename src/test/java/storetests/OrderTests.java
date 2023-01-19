@@ -47,9 +47,8 @@ public class OrderTests {
 
     @Test (groups = { "order"})
     public void getOrderById() {
-        String orderID = "2";
+        String orderID = "5";
         Order ourOrder = StoreServiceSteps.getOrderById(orderID);
-
         Assert.assertEquals((Integer.toString(ourOrder.getId())), orderID,
                 "The recieved order does not match the requested id! We recieved order: " + (ourOrder.getId()));
     }
@@ -65,7 +64,7 @@ public class OrderTests {
 
     private Order createOrder(){
         Random random = new Random();
-        int id = random.nextInt(1,10);
+        int id = random.nextInt(10,20);
         int petId = random.nextInt(0,10);
         int quantity = 0;
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");

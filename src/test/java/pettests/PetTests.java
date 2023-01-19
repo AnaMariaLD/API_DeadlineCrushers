@@ -87,7 +87,7 @@ public class PetTests {
 
     @Test(groups = {"pet"})
     public void attachImageToAPet(){
-        File file = new File("C:\\Users\\Zoltan_Bone-Greczi\\IdeaProjects\\API_DeadlineCrushers\\src\\main\\java\\resources\\dog.jpg");
+        File file = new File(System.getProperty("user.dir")+"/src/main/resources/dog.jpg");
         Response response = PetSteps.postPictureToAPet("3","wdwdw",file);
 
         JsonPath json = response.jsonPath();
@@ -99,7 +99,7 @@ public class PetTests {
 
     @Test(groups = {"pet","smoke"})
     public void attachImageToAPetNegative(){
-        File file = new File("C:\\Users\\Zoltan_Bone-Greczi\\IdeaProjects\\API_DeadlineCrushers\\src\\main\\java\\resources\\Proiect_pestStore_api.docx");
+        File file = new File(System.getProperty("user.dir")+"/src/main/resources/textUpload.txt");
         Response response = PetSteps.postPictureToAPet("3","wdwdw",file);
 
         System.out.println(response.body().asString());

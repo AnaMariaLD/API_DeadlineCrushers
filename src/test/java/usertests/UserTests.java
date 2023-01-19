@@ -53,8 +53,6 @@ public class UserTests {
         user = createUserBody();
         writeUserDataInFile("CreatedUser",user);
         response = UserServiceSteps.createUser(user);
-        User expectedUser = response.body().as(User.class);
-        writeUserDataInFile("RetrievedUser", expectedUser);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
     }
 
