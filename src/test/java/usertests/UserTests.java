@@ -1,13 +1,23 @@
 package usertests;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import entities.Pet;
 import entities.User;
+import io.qameta.allure.Allure;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import steps.UserServiceSteps;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserTests {
     private static Response response;
@@ -39,8 +49,9 @@ public class UserTests {
     }
 
     @Test (groups = { "user", "smoke"})
-    public void createUserTest() {
+    public void createUserTest() throws IOException {
         user = createUserBody();
+        writeUserDataInFile("CreatedUser",user);
         response = UserServiceSteps.createUser(user);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.SC_OK);
     }
@@ -86,5 +97,25 @@ public class UserTests {
                 .setPhone("0782700926")
                 .setUserStatus(200));
         return listOfUsers;
+    }
+    private Map<String, Object> mapUserData(User user){
+        Map<String,Object> userDataMap = new HashMap<String,Object>();
+        userDataMap.put("id",user.getId());
+        userDataMap.put("username", user.getUsername());
+        userDataMap.put("firstName",user.getFirstName());
+        userDataMap.put("lastName",user.getLastName());
+        userDataMap.put("email",user.getEmail());
+        userDataMap.put("password",user.getPassword());
+        userDataMap.put("phone",user.getPhone());
+        userDataMap.put("userStatus",user.getUserStatus());
+        return userDataMap;
+    }
+
+    private void writeUserDataInFile(String fileName, User user) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(new File(System.getProperty("user.dir") + "/src/test/resources/" +fileName+ ".json"), mapUserData(user));
+        try (InputStream is = Files.newInputStream(Paths.get(System.getProperty("user.dir") + "/src/test/resources/" +fileName+ ".json"))) {
+            Allure.addAttachment(fileName,"application/json",is,".json");
+        }
     }
 }
